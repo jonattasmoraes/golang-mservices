@@ -1,0 +1,34 @@
+services:
+  titan:
+    build: .
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+    volumes:
+      - .:/app
+    command: air
+    depends_on:
+      - postgres
+    networks:
+      - minha-rede
+
+  postgres:
+    image: postgres:13
+    container_name: titan_postgres
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_DB: titan
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - titan_postgres_data:/var/lib/postgresql/data
+    networks:
+      - minha-rede
+
+volumes:
+  titan_postgres_data:
+
+networks:
+  minha-rede:
+    external: true

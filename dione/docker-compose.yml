@@ -1,0 +1,34 @@
+services:
+  dione:
+    build: .
+    ports:
+      - "8084:8084"
+      - "50053:50053"
+    volumes:
+      - .:/app
+    command: air
+    depends_on:
+      - postgres
+    networks:
+      - minha-rede
+
+  postgres:
+    image: postgres:13
+    container_name: dione_postgres
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: dione
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - dione_postgres_data:/var/lib/postgresql/data
+    networks:
+      - minha-rede
+
+volumes:
+  dione_postgres_data:
+
+networks:
+  minha-rede:
+    external: true

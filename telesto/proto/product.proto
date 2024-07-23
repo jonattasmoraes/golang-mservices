@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package product;
+
+option go_package = "/internal/sales/infra/gen";
+
+service ProductService {
+  rpc GetProductByID(GetProductRequest) returns (GetProductResponse);
+  rpc SaleProducts(SaleProductsRequest) returns (SaleProductsResponse);
+}
+
+message GetProductRequest {
+  string id = 1;
+}
+
+message GetProductResponse {
+  string id = 1;
+  string Name = 2;
+  int64 price = 3;
+  string unit = 4;
+  string category = 5;
+  int64 stock = 6;
+}
+
+message SaleProductRequest {
+  string product_id = 1;
+  int32 quantity = 2;
+}
+
+message SaleProductsRequest {
+  repeated SaleProductRequest products = 1;
+}
+
+message SaleProductResponse {
+  string product_id = 1;
+  int32 quantity = 2;
+}
+
+message SaleProductsResponse {
+  repeated SaleProductResponse products = 1;
+}

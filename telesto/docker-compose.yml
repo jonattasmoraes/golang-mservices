@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  telesto:
+    build: .
+    ports:
+      - "8082:8082"
+    volumes:
+      - .:/app
+    command: air
+    depends_on:
+      - postgres
+    networks:
+      - minha-rede
+
+  postgres:
+    image: postgres:13
+    container_name: telesto_postgres
+    ports:
+      - "5430:5432"
+    environment:
+      POSTGRES_DB: telesto
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - telesto_postgres_data:/var/lib/postgresql/data
+    networks:
+      - minha-rede
+
+volumes:
+  telesto_postgres_data:
+
+networks:
+  minha-rede:
+    external: true

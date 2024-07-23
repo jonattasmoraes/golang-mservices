@@ -1,0 +1,7 @@
+CREATE TABLE sales (
+    id VARCHAR(255) PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    total INTEGER NOT NULL,
+    payment_type VARCHAR(50) NOT NULL,
+    date TIMESTAMP NOT NULL
+);

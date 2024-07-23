@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package reports;
+
+option go_package = "internal/product/infra/gen/reports";
+
+service ReportsService {
+  rpc GetSalesByID(GetSalesByIdRequest) returns (GetSalesByIdResponse);
+  rpc GetSalesByProductId(GetSalesByProductIdRequest) returns (GetSalesByProductIdResponse);
+}
+
+// Get sales by id
+message GetSalesByIdRequest {
+  string saleId = 1;
+}
+
+message GetSalesByIdResponse {
+  string saleId = 1;
+  string userId = 2;
+  int32 total = 3;
+  string paymentType = 4;
+  repeated Product products = 5;
+}
+
+message Product {
+  string productId = 1;
+  string name = 2;
+  string unit = 3;
+  string category = 4;
+  int32 quantity = 5;
+  int32 price = 6;
+}
+
+// Get sales by product id
+message GetSalesByProductIdRequest {
+  string productId = 1;
+}
+
+message GetSalesByProductIdResponse {
+  repeated SaleReport sales = 1;
+}
+
+message SaleReport {
+  string saleId = 1;
+  string userId = 2;
+  int32 total = 3;
+  string paymentType = 4;
+  repeated Product products = 5;
+}

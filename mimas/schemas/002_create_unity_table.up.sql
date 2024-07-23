@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS Unit (
+    ID SERIAL PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL
+);
+
+INSERT INTO Unit (Name) VALUES ('un'), ('lt'), ('kg');

@@ -1,0 +1,36 @@
+version: "4.0"
+
+services:
+  mimas:
+    build: .
+    ports:
+      - "8081:8081"
+      - "50052:50052"
+    volumes:
+      - .:/app
+    command: air
+    depends_on:
+      - postgres
+    networks:
+      - minha-rede
+
+  postgres:
+    image: postgres:13
+    container_name: mimas_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: mimas
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - mimas_postgres_data:/var/lib/postgresql/data
+    networks:
+      - minha-rede
+
+volumes:
+  mimas_postgres_data:
+
+networks:
+  minha-rede:
+    external: true
