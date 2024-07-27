@@ -1,0 +1,23 @@
+###
+# @name createUser
+POST http://localhost:8082/sales
+Content-Type: application/json
+
+{
+    "user_id": "01J1P83E4KJ3EM3H73139AC5PQ",
+    "payment_type": "credit",
+    "products": [
+        {
+            "product_id": "01H7D8E4K5TX7P9ZP6G3V0A1W2",
+            "quantity": 2
+        },
+        {
+            "product_id": "01H7D8E4L6JH0Q1ZP7G4V1B2X3",
+            "quantity": 2
+        },
+        {
+            "product_id": "01H7D8E4M7TX2R3ZQ8G5V2C3Y4",
+            "quantity": 2
+        }
+    ]
+}

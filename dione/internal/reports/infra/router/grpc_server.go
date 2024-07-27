@@ -12,7 +12,7 @@ import (
 	"github.com/jonattasmoraes/dione/internal/reports/usecase"
 )
 
-func StartGrpcServer(getSalesById *usecase.GetSalesById, getSalesByProductId *usecase.GetSalesByProductId) {
+func StartGrpcServer(getSalesById *usecase.GetSalesById) {
 	lis, err := net.Listen("tcp", ":50053")
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
@@ -20,7 +20,7 @@ func StartGrpcServer(getSalesById *usecase.GetSalesById, getSalesByProductId *us
 
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterReportsServiceServer(grpcServer, grpcService.NewSalesReportsGrpcServer(getSalesById, getSalesByProductId))
+	pb.RegisterReportsServiceServer(grpcServer, grpcService.NewSalesReportsGrpcServer(getSalesById))
 
 	reflection.Register(grpcServer)
 

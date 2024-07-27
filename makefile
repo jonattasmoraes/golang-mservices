@@ -7,9 +7,9 @@ default: run
 run:
 	@cd titan && docker-compose up -d
 	@cd mimas && docker-compose up -d
+	@cd kafka && docker-compose up -d
 	@cd dione && docker-compose up -d
 	@cd telesto && docker-compose up -d
-	@cd kafka && docker-compose up -d
 build:
 	go build main.go
 test:

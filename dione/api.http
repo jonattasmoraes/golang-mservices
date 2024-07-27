@@ -1,0 +1,9 @@
+###
+# @name createUser
+GET http://localhost:8084/api/v1/reports/01J3RN9RAGGGM1WWVHY2P5BEDW
+Content-Type: application/json
+
+###
+
+GET http://localhost:8084/api/v1/reports/01J1P83E4KJ3EM3H73139AC5PQ/purchases
+Content-Type: application/json

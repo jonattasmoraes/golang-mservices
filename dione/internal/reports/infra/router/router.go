@@ -15,7 +15,6 @@ func StartRoutes(
 	{
 		reportPath.GET("/:id", reportsHandler.GetSalesById)
 		reportPath.GET("/:id/purchases", reportsHandler.GetSalesByUserId)
-		reportPath.GET("/:id/sales", reportsHandler.GetSalesByProductId)
 	}
 
 	server.Run(":8084")

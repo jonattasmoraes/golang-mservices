@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jonattasmoraes/telesto/internal/sales/domain"
 	"github.com/jonattasmoraes/telesto/internal/sales/usecase"
 )
 
@@ -28,6 +29,34 @@ func (h *SaleHandler) MakeSale(ctx *gin.Context) {
 
 	response, err := h.saleProductUsecase.Execute(ctx, request.UserID, saleProducts, request.PaymentType)
 	if err != nil {
+		if err == domain.ErrInvalidPaymentType {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if err == domain.ErrRequiredPaymentType {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if err == domain.ErrProductsRequired {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if err == usecase.ErrProductNotFound {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if err == usecase.ErrQuantityExceeded {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if err == usecase.ErrUserNotFound {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if err == usecase.ErrStockNotAvailable {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

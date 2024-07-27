@@ -52,19 +52,17 @@ func main() {
 	repo := repository.NewSalesRepository(writer, reader)
 	getSaleById := usecase.NewGetSalesById(repo)
 	getSalesByUser := usecase.NewGetSalesByUserIDUsecase(repo)
-	getSalesByProductId := usecase.NewGetSalesByProductId(repo)
 
 	reportHandler := handl.NewGetSaleByIdHandler(
 		getSaleById,
 		getSalesByUser,
-		getSalesByProductId,
 	)
 
 	reportMessages := usecase.NewSaveSaleReportUsecase(repo, partitionConsumer)
 
 	// Start gRPC server
 	go func() {
-		router.StartGrpcServer(getSaleById, getSalesByProductId)
+		router.StartGrpcServer(getSaleById)
 	}()
 
 	// Start consumer

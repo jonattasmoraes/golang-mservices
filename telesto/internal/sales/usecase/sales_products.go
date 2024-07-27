@@ -12,6 +12,13 @@ import (
 	userpb "github.com/jonattasmoraes/telesto/internal/sales/infra/gen/user"
 )
 
+var (
+	ErrUserNotFound = errors.New("user not found, please enter a valid user and try again")
+	ErrProductNotFound = errors.New("product not found, please enter a valid product and try again")
+	ErrQuantityExceeded = errors.New("only 100 units can be purchased at a time, please try again")
+	ErrStockNotAvailable = errors.New("stock not available, please try again with a lower quantity")
+)
+
 type SaleRequestDTO struct {
 	UserID      string              `json:"user_id"`
 	PaymentType string              `json:"payment_type"`
@@ -64,7 +71,7 @@ func NewSaleProductUsecase(
 func (u *SaleProductUsecase) Execute(ctx context.Context, userID string, reqs []ProductRequestDTO, paymentType string) (*SaleResponseDTO, error) {
 	_, err := u.userClient.GetUserByID(ctx, &userpb.GetUserRequest{Id: userID})
 	if err != nil {
-		return nil, err
+		return nil, ErrUserNotFound
 	}
 
 	var products []domain.SaleProduct
@@ -73,11 +80,11 @@ func (u *SaleProductUsecase) Execute(ctx context.Context, userID string, reqs []
 	for _, req := range reqs {
 		productResp, err := u.productClient.GetProductByID(ctx, &productpb.GetProductRequest{Id: req.ProductID})
 		if err != nil {
-			return nil, err
+			return nil, ErrProductNotFound
 		}
 
 		if req.Quantity > int(productResp.Stock) {
-			return nil, errors.New("quantity exceeds stock for product " + req.ProductID)
+			return nil, ErrStockNotAvailable
 		}
 
 		product := domain.SaleProduct{
@@ -101,6 +108,11 @@ func (u *SaleProductUsecase) Execute(ctx context.Context, userID string, reqs []
 	if sale == nil {
 		return nil, errors.New("invalid sale data")
 	}
+
+	if sale.Products[0].Quantity > 100 {
+		return nil, ErrQuantityExceeded
+	}
+
 	sale.Total = total
 
 	_, err = u.productClient.SaleProducts(ctx, &productpb.SaleProductsRequest{

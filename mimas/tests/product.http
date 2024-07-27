@@ -1,0 +1,25 @@
+###
+# @name createUser
+POST http://localhost:8081/api/product
+Content-Type: application/json
+
+{
+  "name": "Produto C",
+  "price": 44,
+  "unit_id": 3,
+  "category_id": 3
+}
+
+@userId = {{ createUser.response.body.data.id }}
+
+###
+
+GET http://localhost:8081/api/products/?page=1
+
+###
+
+GET http://localhost:8080/api/product/{{ userId }}
+
+###
+
+DELETE http://localhost:8081/api/product/01J1RAYJA9HCJVNW9VN9PSQ0HM

@@ -1,9 +1,7 @@
 package repository
 
 import (
-	"database/sql"
 	"errors"
-	"log"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -62,9 +60,6 @@ func (r *ReportSqlx) GetBySaleID(saleID string) (*domain.SaleReport, error) {
 
 	rows, err := r.reader.Queryx(query, saleID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, ErrProductNotFound
-		}
 		return nil, err
 	}
 	defer rows.Close()
@@ -74,7 +69,7 @@ func (r *ReportSqlx) GetBySaleID(saleID string) (*domain.SaleReport, error) {
 		total       int
 		paymentType string
 		saleDate    time.Time
-		products    []domain.ProductReport
+		productMap  = make(map[string]domain.ProductReport)
 	)
 
 	for rows.Next() {
@@ -112,6 +107,16 @@ func (r *ReportSqlx) GetBySaleID(saleID string) (*domain.SaleReport, error) {
 			Quantity:  quantity,
 			Price:     price,
 		}
+
+		productMap[productID] = product
+	}
+
+	if len(productMap) == 0 {
+		return nil, ErrProductNotFound
+	}
+
+	var products []domain.ProductReport
+	for _, product := range productMap {
 		products = append(products, product)
 	}
 
@@ -127,19 +132,18 @@ func (r *ReportSqlx) GetBySaleID(saleID string) (*domain.SaleReport, error) {
 	return report, nil
 }
 
+
 func (r *ReportSqlx) GetSalesByUserId(userID string) ([]*domain.SaleReport, error) {
 	query := `
 	SELECT
-		user_id, sale_id, product_id, name, unit, category, quantity, price, total, payment_type, sale_date
+		sale_id, product_id, name, unit, category, quantity, price, total, payment_type, sale_date
 	FROM sale_reports
 	WHERE user_id = $1
+	ORDER BY sale_date
 	`
 
 	rows, err := r.reader.Queryx(query, userID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, nil
-		}
 		return nil, err
 	}
 	defer rows.Close()
@@ -160,7 +164,6 @@ func (r *ReportSqlx) GetSalesByUserId(userID string) ([]*domain.SaleReport, erro
 		)
 
 		err := rows.Scan(
-			&userID,
 			&saleID,
 			&productID,
 			&name,
@@ -199,97 +202,14 @@ func (r *ReportSqlx) GetSalesByUserId(userID string) ([]*domain.SaleReport, erro
 		}
 	}
 
+	if len(salesMap) == 0 {
+		return nil, ErrProductNotFound
+	}
+
 	var sales []*domain.SaleReport
 	for _, sale := range salesMap {
 		sales = append(sales, sale)
 	}
 
 	return sales, nil
-}
-
-func (r *ReportSqlx) GetSalesByProductId(productID string) (*domain.SaleReport, error) {
-	query := `
-	SELECT
-		user_id, sale_id, product_id, name, unit, category, quantity, price, total, payment_type, sale_date
-	FROM sale_reports
-	WHERE product_id = $1
-	`
-
-	rows, err := r.reader.Queryx(query, productID)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, ErrProductNotFound
-		}
-		return nil, err
-	}
-	defer rows.Close()
-
-	var (
-		userID      string
-		saleID      string
-		total       int
-		paymentType string
-		saleDate    time.Time
-		products    []domain.ProductReport
-	)
-
-	for rows.Next() {
-		var (
-			productID string
-			name      string
-			unit      string
-			category  string
-			quantity  int
-			price     int
-		)
-
-		err := rows.Scan(
-			&userID,
-			&saleID,
-			&productID,
-			&name,
-			&unit,
-			&category,
-			&quantity,
-			&price,
-			&total,
-			&paymentType,
-			&saleDate,
-		)
-		if err != nil {
-			return nil, err
-		}
-
-		// Log para verificar os valores escaneados
-		log.Printf("Scanned values: userID=%s, saleID=%s, productID=%s, name=%s, unit=%s, category=%s, quantity=%d, price=%d, total=%d, paymentType=%s, saleDate=%v",
-			userID, saleID, productID, name, unit, category, quantity, price, total, paymentType, saleDate)
-
-		product := domain.ProductReport{
-			ProductID: productID,
-			Name:      name,
-			Unit:      unit,
-			Category:  category,
-			Quantity:  quantity,
-			Price:     price,
-		}
-		products = append(products, product)
-	}
-
-	if rows.Err() != nil {
-		return nil, rows.Err()
-	}
-
-	report := &domain.SaleReport{
-		UserID:      userID,
-		SaleID:      saleID,
-		Total:       total,
-		PaymentType: paymentType,
-		SaleDate:    saleDate,
-		Products:    products,
-	}
-
-	// Log para verificar o relatório final
-	log.Printf("Final report: %+v", report)
-
-	return report, nil
 }

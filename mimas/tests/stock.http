@@ -1,0 +1,23 @@
+POST http://localhost:8081/api/stock
+Content-Type: application/json
+
+{
+  "product_id": "01J1PATMVDPDQJKRC037EGDFET",
+  "quantity": 100
+}
+
+@userId = {{ createUser.response.body.data.id }}
+
+###
+
+### Types: "increase" | "decrease" 
+
+PATCH http://localhost:8080/api/stock
+Content-Type: application/json
+
+{
+  "product_id": "01J1E3RB4ZPX6Q02M01TCNPXFD",
+  "operation": "decrease",
+  "quantity": 50
+}
+

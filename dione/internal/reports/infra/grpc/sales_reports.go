@@ -12,18 +12,16 @@ import (
 type salesReportsGrpcServer struct {
 	pb.UnimplementedReportsServiceServer
 	reportService  *usecase.GetSalesById
-	getByProductId *usecase.GetSalesByProductId
 }
 
-func NewSalesReportsGrpcServer(getSalesById *usecase.GetSalesById, getByProductId *usecase.GetSalesByProductId) *salesReportsGrpcServer {
+func NewSalesReportsGrpcServer(getSalesById *usecase.GetSalesById) *salesReportsGrpcServer {
 	return &salesReportsGrpcServer{
 		reportService:  getSalesById,
-		getByProductId: getByProductId,
 	}
 }
 
 func (s *salesReportsGrpcServer) GetSalesByID(ctx context.Context, req *pb.GetSalesByIdRequest) (*pb.GetSalesByIdResponse, error) {
-	report, err := s.reportService.Execute(req.SaleId)
+	report, err := s.reportService.Execute(req.SaleId,)
 	if err != nil {
 		return nil, err
 	}
@@ -41,38 +39,6 @@ func (s *salesReportsGrpcServer) GetSalesByID(ctx context.Context, req *pb.GetSa
 	}
 
 	for _, product := range report.Products {
-		response.Products = append(response.Products, &pb.Product{
-			ProductId: product.ProductID,
-			Name:      product.Name,
-			Unit:      product.Unit,
-			Category:  product.Category,
-			Quantity:  int32(product.Quantity),
-			Price:     int32(product.Price),
-		})
-	}
-
-	return response, nil
-}
-
-func (s *salesReportsGrpcServer) GetSalesByProductId(ctx context.Context, req *pb.GetSalesByProductIdRequest) (*pb.GetSalesByProductIdResponse, error) {
-	reports, err := s.getByProductId.Execute(req.ProductId)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(reports.Products) == 0 {
-		return nil, status.Error(codes.NotFound, "product not found")
-	}
-
-	response := &pb.GetSalesByProductIdResponse{
-		SaleId:      reports.SaleID,
-		UserId:      reports.UserID,
-		Total:       int32(reports.Total),
-		PaymentType: reports.PaymentType,
-		Products:    []*pb.Product{},
-	}
-
-	for _, product := range reports.Products {
 		response.Products = append(response.Products, &pb.Product{
 			ProductId: product.ProductID,
 			Name:      product.Name,

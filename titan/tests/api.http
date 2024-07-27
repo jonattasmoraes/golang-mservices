@@ -1,0 +1,36 @@
+###
+# @name createUser
+POST http://localhost:8080/api/user
+Content-Type: application/json
+
+{
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@example.com",
+    "password": "my_secure_password"
+}
+
+@userId = {{ createUser.response.body.data.id }}
+
+### 01J1KKGF70VA98RQ8E0CEZ24EA
+
+GET http://localhost:8080/api/users/?page=1
+
+###
+
+GET http://localhost:8080/api/user/{{ userId }}
+
+###
+
+PATCH http://localhost:8080/api/user/{{ userId }}
+Content-Type: application/json
+
+{
+    "first_name": "Julio",
+    "last_name": "Alves",
+    "email": "julioOlder@example.com"
+}
+
+###
+
+DELETE http://localhost:8080/api/user/{{ userId }}
