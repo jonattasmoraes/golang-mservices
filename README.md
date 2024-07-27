@@ -63,7 +63,7 @@ StellarCommerce/
 git clone https://github.com/jonattasmoraes/stellar_commerce.git
 cd stellar_commerce
 
-2. **Suba os containers com Docker Compose:**
+3. **Suba os containers com Docker Compose:**
 
 ```markdown
 make run
@@ -179,7 +179,7 @@ StellarCommerce/
 git clone https://github.com/jonattasmoraes/golang-mservices.git
 cd stellar_commerce
 
-2. **Bring up the containers with Docker Compose:**
+3. **Bring up the containers with Docker Compose:**
 
 ```bash
 make run
