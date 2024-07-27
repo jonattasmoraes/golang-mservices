@@ -60,10 +60,13 @@ StellarCommerce/
 ### Passo a Passo
 
 1. **Clone o monorepo:**
+
+```markdown
 git clone https://github.com/jonattasmoraes/stellar_commerce.git
 cd stellar_commerce
+```
 
-3. **Suba os containers com Docker Compose:**
+2. **Suba os containers com Docker Compose:**
 
 ```markdown
 make run
@@ -176,10 +179,13 @@ StellarCommerce/
 ### Steps
 
 1. **Clone the monorepo:**
+
+```markdown
 git clone https://github.com/jonattasmoraes/golang-mservices.git
 cd stellar_commerce
+```
 
-3. **Bring up the containers with Docker Compose:**
+2. **Bring up the containers with Docker Compose:**
 
 ```bash
 make run
