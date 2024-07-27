@@ -117,6 +117,8 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull re
 <div id='english_version'/>
 ---
 
+![Banner](bg.png)
+
 # 📦 StellarCommerce: The Sales Microservice (English Version)
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) ![Go](https://img.shields.io/badge/Go-1.22-blue.svg) ![gRPC](https://img.shields.io/badge/gRPC-Enabled-brightgreen) ![Kafka](https://img.shields.io/badge/Kafka-Enabled-brightgreen) ![Docker](https://img.shields.io/badge/Docker-Enabled-blue) ![Build](https://img.shields.io/badge/Build-Passing-brightgreen) ![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen) ![Coverage](https://img.shields.io/badge/Coverage-56%25-orange)
