@@ -10,6 +10,7 @@ run:
 	@cd kafka && docker-compose up -d
 	@cd dione && docker-compose up -d
 	@cd telesto && docker-compose up -d
+	@cd gateway && docker-compose up -d
 build:
 	go build main.go
 test:
