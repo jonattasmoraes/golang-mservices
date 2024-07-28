@@ -1,6 +1,6 @@
 **[Click here for the English version](#english_version)**
 
-![Banner](bg.png)
+![Banner](bg_st.png)
 
 # 📦 StellarCommerce: The Sales Microservice
 
@@ -120,7 +120,7 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull re
 <div id='english_version'/>
 ---
 
-![Banner](bg.png)
+![Banner](bg_st.png)
 
 # 📦 StellarCommerce: The Sales Microservice (English Version)
 
